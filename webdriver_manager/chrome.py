@@ -58,7 +58,7 @@ def get_chromedriver_version(chrome_version) -> str:
             return version_response.text
         elif version_response.status_code == 404:
             raise ValueError(
-                f"There is no such driver version number by url {version_response.url}"
+                f"There is no such browser version number {chrome_version}"
             )
         else:
             raise ValueError(
@@ -67,4 +67,4 @@ def get_chromedriver_version(chrome_version) -> str:
                 f"response headers:\n{dict(version_response.headers)}\n"
             )
     else:
-        raise ValueError(f"{chrome_version} is an invalid driver version number")
+        raise ValueError(f"There is no such browser version number {chrome_version}")
