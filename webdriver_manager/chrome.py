@@ -44,7 +44,9 @@ class ChromeDriverManager(DriverManager):
         return driver_path
 
 def get_chromedriver_version(chrome_version) -> str:
-    if fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version):
+    if fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
+        r"2\.[0-9]{1,2}", chrome_version
+    ):
         return chrome_version
     elif fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
         r"[0-9]*", chrome_version
