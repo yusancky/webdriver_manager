@@ -43,8 +43,10 @@ class ChromeDriverManager(DriverManager):
         os.chmod(driver_path, 0o755)
         return driver_path
 
-def get_chromedriver_version(chrome_version) -> str:
-    if fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
+def get_chromedriver_version(chrome_version):
+    if chrome_version is None:
+        return None
+    elif fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
         r"2\.[0-9]{1,2}", chrome_version
     ):
         return chrome_version
