@@ -44,10 +44,10 @@ class ChromeDriverManager(DriverManager):
         return driver_path
 
 def get_chromedriver_version(chrome_version) -> str:
-    if fullmatch("[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version):
+    if fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version):
         return chrome_version
-    elif fullmatch("[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
-        "[0-9]*", chrome_version
+    elif fullmatch(r"[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
+        r"[0-9]*", chrome_version
     ):
         version_response = requests.get(
             f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{chrome_version}"
