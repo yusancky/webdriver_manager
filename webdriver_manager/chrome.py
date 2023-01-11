@@ -38,29 +38,29 @@ class ChromeDriverManager(DriverManager):
             http_client=self.http_client,
         )
 
-    def get_chromedriver_version(chrome_version) -> str:
-        if fullmatch("[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version):
-            return chrome_version
-        elif fullmatch("[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
-            "[0-9]*", chrome_version
-        ):
-            version_response = requests.get(
-                f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{chrome_version}"
-            )
-            if version_response.status_code == 200:
-                return version_response.text
-            elif version_response.status_code == 404:
-                raise ValueError(
-                    f"There is no such driver version number by url {version_response.url}"
-                )
-            else:
-                raise ValueError(
-                    f"response body:\n{version_response.text}\n"
-                    f"request url:\n{version_response.request.url}\n"
-                    f"response headers:\n{dict(version_response.headers)}\n"
-                )
-
     def install(self) -> str:
         driver_path = self._get_driver_path(self.driver)
         os.chmod(driver_path, 0o755)
         return driver_path
+
+def get_chromedriver_version(chrome_version) -> str:
+    if fullmatch("[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", chrome_version):
+        return chrome_version
+    elif fullmatch("[0-9]*\.[0-9]*\.[0-9]*", chrome_version) or fullmatch(
+        "[0-9]*", chrome_version
+    ):
+        version_response = requests.get(
+            f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{chrome_version}"
+        )
+        if version_response.status_code == 200:
+            return version_response.text
+        elif version_response.status_code == 404:
+            raise ValueError(
+                f"There is no such driver version number by url {version_response.url}"
+            )
+        else:
+            raise ValueError(
+                f"response body:\n{version_response.text}\n"
+                f"request url:\n{version_response.request.url}\n"
+                f"response headers:\n{dict(version_response.headers)}\n"
+            )
