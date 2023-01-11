@@ -1,4 +1,6 @@
 import os
+import re
+import requests
 from typing import Optional
 
 from webdriver_manager.core.download_manager import DownloadManager
@@ -20,6 +22,22 @@ class ChromeDriverManager(DriverManager):
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):
+        if re.fullmatch("[0-9]*\.[0-9]*\.[0-9]*", version) or re.fullmatch(
+            "[0-9]*", version
+        ):
+            version_response = requests.get(
+                f"https://chromedriver.storage.googleapis.com/LATEST_RELEASE_{version}"
+            )
+            if version_response.status_code == 404:
+                raise ValueError(
+                    f"There is no such driver version number by url {version_response.url}"
+                )
+            if version_response.status_code == 200:
+                if re.fullmatch(
+                    "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*", version_response.text
+                ):
+                    version = version_response.text
+
         super().__init__(
             path,
             cache_valid_range=cache_valid_range,
