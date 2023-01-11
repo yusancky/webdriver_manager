@@ -66,3 +66,5 @@ def get_chromedriver_version(chrome_version) -> str:
                 f"request url:\n{version_response.request.url}\n"
                 f"response headers:\n{dict(version_response.headers)}\n"
             )
+    else:
+        raise ValueError(f"{chrome_version} is an invalid driver version number")
