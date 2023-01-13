@@ -20,6 +20,7 @@ class ChromeDriverManager(DriverManager):
             url: str = "https://chromedriver.storage.googleapis.com",
             latest_release_url: str = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE",
             chrome_type: str = ChromeType.GOOGLE,
+            get_version: bool = False,
             cache_valid_range: int = 1,
             download_manager: Optional[DownloadManager] = None,
     ):
@@ -30,7 +31,7 @@ class ChromeDriverManager(DriverManager):
 
         self.driver = ChromeDriver(
             name=name,
-            version=get_chromedriver_version(version),
+            version=get_chromedriver_version(version, get_version),
             os_type=os_type,
             url=url,
             latest_release_url=latest_release_url,
@@ -43,12 +44,12 @@ class ChromeDriverManager(DriverManager):
         os.chmod(driver_path, 0o755)
         return driver_path
 
-def get_chromedriver_version(browser_version):
-    if browser_version is None:
-        return None
-    elif fullmatch(r"\d+\.\d+\.\d+\.\d+", browser_version):
+def get_chromedriver_version(browser_version, get_version):
+    if (not get_version) or (browser_version is None):
         return browser_version
-    elif fullmatch(r"\d+\.\d+\.\d+", browser_version) or fullmatch(
+    elif fullmatch(r"\d+\.\d+\.\d+\.\d+", browser_version):
+        browser_version = browser_version[:browser_version.rfind(".")]
+    if fullmatch(r"\d+\.\d+\.\d+", browser_version) or fullmatch(
         r"\d+", browser_version
     ):
         version_response = requests.get(
